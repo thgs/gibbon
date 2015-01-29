@@ -1,0 +1,7 @@
+<?php
+    return [
+    "."         =>  "BasicRenderer",
+    ".txt"      =>  "Nothing",
+    ".md"       =>  "MDRenderer true",  # 1st parameter is for MarkdownExtra
+    ".blade.*"  =>  "Blade"
+];

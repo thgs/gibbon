@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+
+    # this 
+    RewriteCond %{REQUEST_URI} !=/index.php
+    RewriteRule .* index.php [L]
+    # or simply this - i guess, this does rewrite everytime - while the above 
+    # doesnt do rewrite everytime, omits index.php rewrite :/
+#    RewriteRule . index.php [L]
+
+</IfModule>
+
+#DirectoryIndex index.php
+# if mod_dir is enabled you can use the below, and get away the rewrites
+# simply by inserting full path to index.php (root is document dir)
+#FallbackResource /theo/gibbon/content/index.php

@@ -1,0 +1,23 @@
+{
+    "name": "theogpl57/gibbon",
+    "description": "A file based CMS in PHP - Zhuangzi style",
+    "authors": [
+        {
+            "name": "Theodore Gotsopoulos",
+            "email": "theogpl57@gmail.com"
+        }
+    ],
+    "require": {
+        "tombzombie/dice": "dev-PHP5.3",
+        "michelf/php-markdown": "1.4.x-dev"
+    },
+    "autoload": {
+            "classmap": [
+                    "app"
+            ],
+            "psr-4": {
+                    "Gibbon\\": "app/gibbon"
+            }
+    },
+    "minimum-stability": "dev"
+}

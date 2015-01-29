@@ -1,0 +1,6 @@
+<?php return 
+[
+    '.txt'      =>  "BasicRenderer",
+    '.jp'       =>  "somewrapper",
+    '.blade'    =>  "blade-wrapper"
+];
