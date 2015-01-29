@@ -1,4 +1,5 @@
 /vendor
+/nbproject
 composer.phar
 composer.lock
 .env.*.php
