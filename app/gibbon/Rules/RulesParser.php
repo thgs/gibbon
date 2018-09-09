@@ -1,11 +1,10 @@
-<?php namespace Gibbon\Rules;
+<?php
 
-class RulesParser {
-    
+namespace Gibbon\Rules;
+
+class RulesParser
+{
     public function parse()
     {
-        
     }
-    
 }
-
