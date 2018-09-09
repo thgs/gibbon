@@ -1,3 +1,8 @@
-<?php namespace Gibbon;
+<?php
 
-function dodo() { echo 'dodo'; }
+namespace Gibbon;
+
+function dodo()
+{
+    echo 'dodo';
+}

@@ -1,6 +1,7 @@
 <?php
+
 // init our dependency injection container
-$dice = new Dice\Dice;
+$dice = new Dice\Dice();
 
 // Create application object
 $app = $dice->create('Gibbon\Application', [$dice]);

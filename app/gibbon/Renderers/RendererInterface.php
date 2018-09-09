@@ -1,5 +1,8 @@
-<?php namespace Gibbon\Renderers;
+<?php
 
-interface Renderer {
+namespace Gibbon\Renderers;
+
+interface RendererInterface
+{
     public function render($file);
 }
