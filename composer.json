@@ -1,5 +1,5 @@
 {
-    "name": "theogpl57/gibbon",
+    "name": "thgs/gibbon",
     "description": "A file based CMS in PHP - Zhuangzi style",
     "authors": [
         {
@@ -8,8 +8,9 @@
         }
     ],
     "require": {
-        "tombzombie/dice": "dev-PHP5.3",
-        "michelf/php-markdown": "1.4.x-dev"
+        "php": "^7.4",
+        "level-2/dice": "^4",
+        "michelf/php-markdown": "^1"
     },
     "autoload": {
             "classmap": [
