@@ -37,7 +37,9 @@ class Application
             // now we add to our configuration the local configuration, if exists
             if ($local_conf = $this->getConfFile($file)) {
                 $this->configuration = array_replace(
-                    $this->configuration, $this->parseConfFile($local_conf));
+                    $this->configuration,
+                    $this->parseConfFile($local_conf)
+                );
             }
 
             /* old code
