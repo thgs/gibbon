@@ -19,9 +19,9 @@ class Request
         );
 
         // we also set the path to our base dir (not the app directory)
-        $this->app_root = dirname(realpath(dirname(__FILE__).'/..'));
+        $this->app_root = dirname(realpath(dirname(__FILE__) . '/..'));
 
         // and the public directory
-        $this->public_root = $this->app_root.'/content';
+        $this->public_root = $this->app_root . '/content';
     }
 }

@@ -27,7 +27,7 @@ Amp\Loop::run(static function () {
     ];
 
     $logHandler = new StreamHandler(new ResourceOutputStream(STDOUT));
-    $logHandler->setFormatter(new ConsoleFormatter);
+    $logHandler->setFormatter(new ConsoleFormatter());
     $logger = new Logger('server');
     $logger->pushHandler($logHandler);
 
