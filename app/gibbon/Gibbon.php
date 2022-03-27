@@ -120,9 +120,6 @@ class Gibbon
 
     protected function getDefaultConf()
     {
-        $d = $this->parseConfFile($a = $this->app_root.'/../app/.gibbon');
-
-        var_dump($a);
-        return $d;
+        return $this->parseConfFile($a = $this->app_root.'/../app/.gibbon');
     }
 }
