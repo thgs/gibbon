@@ -59,7 +59,7 @@ class Gibbon
             if (($pattern == '.') && (is_dir($file))) {
                 $matchedRules[$pattern] = $rule;
             } else {
-                if (preg_match('/'.$pattern.'/', $file) !== 0) {
+                if (preg_match('/' . $pattern . '/', $file) !== 0) {
                     $matchedRules[$pattern] = $rule;
                 }
             }
@@ -82,7 +82,7 @@ class Gibbon
             // we also pass any parameters found in the rule directly to the
             // renderer constructor
             $renderer = $this->container
-                ->create('Gibbon\\Renderers\\'.$rendererClass, $parameters);
+                ->create('Gibbon\\Renderers\\' . $rendererClass, $parameters);
 
             // render this and return (needs change)
             if ($i == 0) {
@@ -104,8 +104,8 @@ class Gibbon
     protected function getConfFile($file)
     {
         $local_conf = is_dir($file)
-            ? $file.'.gibbon'
-            : pathinfo($file, PATHINFO_DIRNAME).'/.gibbon';
+            ? $file . '.gibbon'
+            : pathinfo($file, PATHINFO_DIRNAME) . '/.gibbon';
 
         return file_exists($local_conf) ? $local_conf : false;
     }
@@ -120,9 +120,6 @@ class Gibbon
 
     protected function getDefaultConf()
     {
-        $d = $this->parseConfFile($a = $this->app_root.'/../app/.gibbon');
-
-        var_dump($a);
-        return $d;
+        return $this->parseConfFile($a = $this->app_root . '/../app/.gibbon');
     }
 }
