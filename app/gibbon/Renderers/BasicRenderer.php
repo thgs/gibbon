@@ -11,9 +11,9 @@ class BasicRenderer // implements Renderer
         foreach ($directoryFiles as $f) {
             $b = basename($f);
             if (is_dir($f)) {
-                $data .= '<a href="'.$b.'">'.$b.'/</a><br />';
+                $data .= '<a href="' . $b . '">' . $b . '/</a><br />';
             } else {
-                $data .= '<a href="'.$b.'">'.$b.'</a><br />';
+                $data .= '<a href="' . $b . '">' . $b . '</a><br />';
             }
         }
 
@@ -22,7 +22,7 @@ class BasicRenderer // implements Renderer
 
     public function renderTxt($file)
     {
-        return '<pre>'.file_get_contents($file).'</pre>';
+        return '<pre>' . file_get_contents($file) . '</pre>';
     }
 
     public function renderPDF($file)
