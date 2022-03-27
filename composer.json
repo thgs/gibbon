@@ -8,9 +8,10 @@
         }
     ],
     "require": {
-        "php": "^7.4",
         "level-2/dice": "^4",
-        "michelf/php-markdown": "^1"
+        "michelf/php-markdown": "^1",
+        "amphp/http-server": "^2",
+        "amphp/log": "dev-master"
     },
     "autoload": {
             "classmap": [
