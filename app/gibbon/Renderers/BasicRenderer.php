@@ -57,19 +57,22 @@ class BasicRenderer // implements Renderer
     public function renderPDF($file): Promise
     {
         // not implemented
-        return call(function () {});
+        return call(function () {
+        });
     }
 
     public function renderHTML($file): Promise
     {
         // not implemented
-        return call(function () {});
+        return call(function () {
+        });
     }
 
     public function renderPHP($file): Promise
     {
         // not implemented
-        return call(function () {});
+        return call(function () {
+        });
     }
 
     public function render($file, $data = null): Promise
