@@ -4,6 +4,7 @@
 require "vendor/autoload.php";
 
 use Amp\ByteStream\ResourceOutputStream;
+use Amp\File\Filesystem;
 use Amp\Http\Server\HttpServer;
 use Amp\Log\ConsoleFormatter;
 use Amp\Log\StreamHandler;
@@ -12,6 +13,8 @@ use Dice\Dice;
 use Gibbon\Gibbon;
 use Gibbon\GibbonHandler;
 use Monolog\Logger;
+
+use function Amp\File\filesystem;
 
 Amp\Loop::run(static function () {
     $cert = new Socket\Certificate(__DIR__ . '/../test/server.pem');

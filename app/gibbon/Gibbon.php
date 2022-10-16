@@ -2,8 +2,12 @@
 
 namespace Gibbon;
 
+use Amp\Promise;
 use Dice\Dice;
 use Psr\Http\Message\UriInterface;
+
+use function Amp\call;
+use function Amp\File\exists;
 
 class Gibbon
 {
@@ -12,27 +16,33 @@ class Gibbon
         $this->configuration = $this->getDefaultConf();
     }
 
-    public function handle(UriInterface $uri): string
+    /**
+     * @param UriInterface $uri
+     * @return Promise<string>
+     */
+    public function handle(UriInterface $uri): Promise
     {
-        $data = '404!!';
+        return call(function () use ($uri) {
+            $data = '404!!';
 
-        $file = $this->app_root . $uri->getPath();
-        if (file_exists($file)) {
-            // now we add to our configuration the local configuration, if exists
-            $configuration = $this->configuration;
-            if ($local_conf = $this->getConfFile($file)) {
-                $configuration = array_replace(
-                    $this->configuration,
-                    $this->parseConfFile($local_conf)
-                );
+            $file = $this->app_root . $uri->getPath();
+            if (yield exists($file)) {
+                // now we add to our configuration the local configuration, if exists
+                $configuration = $this->configuration;
+                if ($local_conf = yield $this->getConfFile($file)) {
+                    $configuration = array_replace(
+                        $this->configuration,
+                        $this->parseConfFile($local_conf)
+                    );
+                }
+
+                // iterate over the rules and keep the matches
+                $matchedRules = $this->matchRules($file, $configuration);
+
+                $data = $this->render($file, $matchedRules);
             }
-
-            // iterate over the rules and keep the matches
-            $matchedRules = $this->matchRules($file, $configuration);
-
-            $data = $this->render($file, $matchedRules);
-        }
-        return $data;
+            return $data;
+        });
     }
 
     //---------------------------------------------------------------------------------
@@ -101,13 +111,16 @@ class Gibbon
     //---------------------------------------------------------------------------------
 
     // given a file or directory, this function will try to locate a gibbon conf file
-    protected function getConfFile($file)
+    protected function getConfFile($file): Promise
     {
-        $local_conf = is_dir($file)
-            ? $file . '.gibbon'
-            : pathinfo($file, PATHINFO_DIRNAME) . '/.gibbon';
+        return call(function () use ($file) {
+            $local_conf = is_dir($file)
+                ? $file . '.gibbon'
+                : pathinfo($file, PATHINFO_DIRNAME) . '/.gibbon';
 
-        return file_exists($local_conf) ? $local_conf : false;
+            $fileExists = yield exists($local_conf);
+            return $fileExists ? $local_conf : false;
+        });
     }
 
     protected function parseConfFile($file)

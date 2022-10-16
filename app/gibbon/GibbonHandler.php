@@ -25,7 +25,7 @@ class GibbonHandler implements RequestHandler
     public function handleRequest(Request $request): Promise
     {
         return call(function () use ($request) {
-            $data = $this->gibbon->handle($request->getUri());
+            $data = yield $this->gibbon->handle($request->getUri());
 
             return new Response(Status::OK, [], $data);
         });
