@@ -8,6 +8,7 @@
         }
     ],
     "require": {
+        "php": "^8",
         "level-2/dice": "^4",
         "michelf/php-markdown": "^1",
         "amphp/http-server": "^2",
