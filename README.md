@@ -1,7 +1,7 @@
-giboon
+gibbon
 =======
 
-giboon is a simple file based CMS in PHP.
+gibbon is a simple file based CMS in PHP.
 
 Project goal is to be able to paste some files in a directory and then configure
 how you want them to be served to the user.
