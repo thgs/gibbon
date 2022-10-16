@@ -3,11 +3,11 @@
 namespace Gibbon;
 
 use Amp\Promise;
+use Amp\File as AmpFile;
 use Dice\Dice;
 use Psr\Http\Message\UriInterface;
 
 use function Amp\call;
-use function Amp\File\exists;
 
 class Gibbon
 {
@@ -23,10 +23,10 @@ class Gibbon
     public function handle(UriInterface $uri): Promise
     {
         return call(function () use ($uri) {
-            $data = '404!!';
+            $response = '404!!';
 
             $file = $this->app_root . $uri->getPath();
-            if (yield exists($file)) {
+            if (yield AmpFile\exists($file)) {
                 // now we add to our configuration the local configuration, if exists
                 $configuration = $this->configuration;
                 if ($local_conf = yield $this->getConfFile($file)) {
@@ -39,17 +39,13 @@ class Gibbon
                 // iterate over the rules and keep the matches
                 $matchedRules = $this->matchRules($file, $configuration);
 
-                $data = $this->render($file, $matchedRules);
+                $response = yield $this->render($file, $matchedRules);
             }
-            return $data;
+            return $response;
         });
     }
 
-    //---------------------------------------------------------------------------------
-    // Render
-    //---------------------------------------------------------------------------------
-
-    protected function render($file, $rules)
+    protected function render(string $file, array $rules): Promise
     {
         return $this->runRules($file, $rules);
     }
@@ -58,7 +54,7 @@ class Gibbon
     // Matching and running rules on files
     //---------------------------------------------------------------------------------
 
-    protected function matchRules($file, $configuration): array
+    protected function matchRules(string $file, $configuration): array
     {
         // correct filename, if needed
         $file = basename($file);
@@ -77,33 +73,43 @@ class Gibbon
         return $matchedRules;
     }
 
-    // runs all matched rules for the file
-    protected function runRules($file, $rules)
+    /**
+     * Runs all matched rules for the file
+     *
+     * @param string $file
+     * @param array $rules
+     * @return Promise<string>
+     */
+    protected function runRules(string $file, array $rules): Promise
     {
-        $i = 0;
-        foreach ($rules as $rule) {
-            // here we explode the rule :)
-            $parameters = explode(' ', $rule);
+        return call(function () use ($file, $rules) {
+            $i = 0;
+            foreach ($rules as $rule) {
+                // here we explode the rule :)
+                $parameters = explode(' ', $rule);
 
-            // get the first element of the array
-            $rendererClass = array_shift($parameters);
+                // get the first element of the array
+                $rendererClass = array_shift($parameters);
 
-            // here we try to get the renderer object
-            // we also pass any parameters found in the rule directly to the
-            // renderer constructor
-            $renderer = $this->container
-                ->create('Gibbon\\Renderers\\' . $rendererClass, $parameters);
+                $parameters[] = $this->app_root;    // little "hack" to pass parameter to renderer
 
-            // render this and return (needs change)
-            if ($i == 0) {
-                $data = $renderer->render($file);
-            } else {
-                $data = $renderer->render($file, $data);
+                // here we try to get the renderer object
+                // we also pass any parameters found in the rule directly to the
+                // renderer constructor
+                $renderer = $this->container
+                    ->create('Gibbon\\Renderers\\' . $rendererClass, $parameters);
+
+                // render this and return (needs change)
+                if ($i == 0) {
+                    $data = yield $renderer->render($file);
+                } else {
+                    $data = yield $renderer->render($file, isset($data) ? $data : null);
+                }
+                $i++;
             }
-            $i++;
-        }
 
-        return $data;
+            return $data;
+        });
     }
 
     //---------------------------------------------------------------------------------
@@ -114,11 +120,12 @@ class Gibbon
     protected function getConfFile($file): Promise
     {
         return call(function () use ($file) {
-            $local_conf = is_dir($file)
+            $isDirectory = yield AmpFile\isDirectory($file);
+            $local_conf = $isDirectory
                 ? $file . '.gibbon'
                 : pathinfo($file, PATHINFO_DIRNAME) . '/.gibbon';
 
-            $fileExists = yield exists($local_conf);
+            $fileExists = yield AmpFile\exists($local_conf);
             return $fileExists ? $local_conf : false;
         });
     }

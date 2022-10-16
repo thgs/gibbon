@@ -2,8 +2,12 @@
 
 namespace Gibbon\Renderers;
 
+use Amp\Promise;
+use Amp\File as AmpFile;
 use Michelf\Markdown;
 use Michelf\MarkdownExtra;
+
+use function Amp\call;
 
 class MDRenderer
 {
@@ -12,16 +16,18 @@ class MDRenderer
         $this->extra = $extra;
     }
 
-    public function render($file, $data = null)
+    public function render($file, $data = null): Promise
     {
-        if ($data == null) {
-            $data = file_get_contents($file);
-        }
+        return call(function () use ($file, $data) {
+            if ($data == null) {
+                $data = yield AmpFile\read($file);
+            }
 
-        if ($this->extra) {
-            return MarkdownExtra::defaultTransform($data);
-        } else {
-            return Markdown::defaultTransform($data);
-        }
+            if ($this->extra) {
+                return MarkdownExtra::defaultTransform($data);
+            } else {
+                return Markdown::defaultTransform($data);
+            }
+        });
     }
 }
